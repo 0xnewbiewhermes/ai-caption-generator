@@ -54,7 +54,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
     refresh();
   };
 
-  if (history.length === 0) return null;
+  // Always show panel, even when empty
 
   const platformLabel: Record<Platform, string> = {
     instagram: "IG",
