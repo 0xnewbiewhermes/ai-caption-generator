@@ -105,12 +105,14 @@ body::before {
 
 .display {
   font-family: var(--font-syne), sans-serif;
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-size: clamp(2rem, 7vw, 5.5rem);
   font-weight: 800;
-  line-height: 0.95;
+  line-height: 1;
   letter-spacing: -0.04em;
   text-transform: uppercase;
   color: var(--fg);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .display-serif {
