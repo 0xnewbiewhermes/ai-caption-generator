@@ -125,20 +125,29 @@ export async function POST(req: NextRequest) {
                 controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
               }
             } else {
-              // Multiple variants — generate sequentially (to avoid rate limits)
+              // Multiple variants — generate in parallel
+              const encoder2 = encoder;
+              const ctrl = controller;
+
+              // Notify all variants start
               for (let i = 0; i < count; i++) {
-                if (abortController.signal.aborted) break;
-                controller.enqueue(encoder.encode(JSON.stringify({ type: "variant_start", index: i }) + "\n"));
+                ctrl.enqueue(encoder2.encode(JSON.stringify({ type: "variant_start", index: i }) + "\n"));
+              }
+
+              // Run all variants in parallel
+              const promises = Array.from({ length: count }, async (_, i) => {
                 for await (const event of generateCaptionStream(reqData)) {
                   if (abortController.signal.aborted) break;
                   if (event.type === "chunk") {
-                    controller.enqueue(encoder.encode(JSON.stringify({ ...event, index: i }) + "\n"));
+                    ctrl.enqueue(encoder2.encode(JSON.stringify({ ...event, index: i }) + "\n"));
                   } else if (event.type === "done") {
-                    controller.enqueue(encoder.encode(JSON.stringify({ ...event, type: "variant_done", index: i }) + "\n"));
+                    ctrl.enqueue(encoder2.encode(JSON.stringify({ ...event, type: "variant_done", index: i }) + "\n"));
                   }
                 }
-              }
-              controller.enqueue(encoder.encode(JSON.stringify({ type: "all_done" }) + "\n"));
+              });
+
+              await Promise.all(promises);
+              ctrl.enqueue(encoder2.encode(JSON.stringify({ type: "all_done" }) + "\n"));
             }
             controller.close();
           } catch (err) {
