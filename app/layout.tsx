@@ -123,7 +123,6 @@ export default function RootLayout({
       className={`${dmSans.variable} ${spaceMono.variable} ${syne.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="google-site-verification" content="vq8wUNbqD5UZSc0PYsZudJdE_l_ltVgCXH9NFTgemtY" />
       </head>
