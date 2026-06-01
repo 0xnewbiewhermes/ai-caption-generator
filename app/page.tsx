@@ -43,12 +43,7 @@ export default function Home() {
               aicaption
             </span>
           </div>
-          <a
-            href="#generator"
-            className="label hover:text-[var(--accent)] transition-colors"
-          >
-            Mulai &rarr;
-          </a>
+          <span className="label">Gratis · Tanpa login</span>
         </nav>
       </header>
 
