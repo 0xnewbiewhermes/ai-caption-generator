@@ -54,25 +54,21 @@ export default function Home() {
 
       <main className="flex-1">
         {/* ── Hero ── */}
-        <section className="max-w-4xl mx-auto px-6 pt-20 pb-16 sm:pt-32 sm:pb-24">
+        <section className="max-w-4xl mx-auto px-5 sm:px-6 pt-16 pb-12 sm:pt-32 sm:pb-24">
           <div className="max-w-2xl">
-            <div className="accent-line mb-6" />
+            <div className="accent-line mb-5 sm:mb-6" />
             <h1 className="display text-[var(--fg)] animate-in">
-              Tulis caption,
-              <br />
-              bukan cuma
-              <br />
-              <span className="text-[var(--accent)]">generate.</span>
+              Tulis caption, bukan cuma <span className="text-[var(--accent)]">generate.</span>
             </h1>
             <p
-              className="mt-6 text-[var(--fg-dim)] text-lg leading-relaxed max-w-md animate-in-delayed"
+              className="mt-5 sm:mt-6 text-[var(--fg-dim)] text-base sm:text-lg leading-relaxed max-w-md animate-in-delayed"
               style={{ fontFamily: "var(--font-instrument-serif)", fontStyle: "italic" }}
             >
               Ketik topik apa aja, bahkan cuma 1 kata. AI buatkan brief
               detail, lalu tulis caption yang natural dan siap post.
             </p>
-            <div className="mt-8 flex items-center gap-5 animate-in-delayed">
-              <a href="#generator" className="btn btn-primary">
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 animate-in-delayed">
+              <a href="#generator" className="btn btn-primary w-full sm:w-auto justify-center">
                 Coba sekarang
                 <IconArrowRight className="w-4 h-4" />
               </a>
@@ -82,11 +78,11 @@ export default function Home() {
         </section>
 
         {/* ── Generator ── */}
-        <section id="generator" className="max-w-4xl mx-auto px-6 pb-20">
+        <section id="generator" className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
           <div className="relative">
-            {/* Watermark */}
+            {/* Watermark — hidden on small screens */}
             <div
-              className="watermark absolute -top-16 -left-8 sm:-top-24 sm:-left-16 select-none pointer-events-none"
+              className="watermark absolute -top-16 -left-8 sm:-top-24 sm:-left-16 select-none pointer-events-none hidden sm:block"
               aria-hidden="true"
             >
               AI
@@ -98,13 +94,13 @@ export default function Home() {
         </section>
 
         {/* ── Explanation ── */}
-        <section className="max-w-4xl mx-auto px-6 pb-20">
-          <div className="card-accent p-6 sm:p-8">
-            <div className="flex items-start gap-4 mb-5">
-              <span className="section-number leading-none">?</span>
+        <section className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
+          <div className="card-accent p-5 sm:p-8">
+            <div className="flex items-start gap-3 sm:gap-4 mb-5">
+              <span className="section-number leading-none text-[3rem] sm:text-[clamp(4rem,10vw,8rem)]">?</span>
               <div>
                 <h2
-                  className="text-xl font-bold text-[var(--fg)] tracking-tight"
+                  className="text-lg sm:text-xl font-bold text-[var(--fg)] tracking-tight"
                   style={{ fontFamily: "var(--font-syne)" }}
                 >
                   Kenapa hasilnya beda?
@@ -173,7 +169,7 @@ export default function Home() {
         </section>
 
         {/* ── Features ── */}
-        <section className="max-w-4xl mx-auto px-6 pb-20">
+        <section className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
           <div className="label mb-6">Fitur</div>
           <div className="space-y-0">
             {[
@@ -225,7 +221,7 @@ export default function Home() {
         </section>
 
         {/* ── FAQ ── */}
-        <section className="max-w-4xl mx-auto px-6 pb-20">
+        <section className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
           <div className="label mb-6">FAQ</div>
           <div className="space-y-0">
             {[
@@ -269,8 +265,8 @@ export default function Home() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[var(--border)] py-8 px-6">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+      <footer className="border-t border-[var(--border)] py-6 sm:py-8 px-5 sm:px-6">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-[var(--accent)]" />
             <span

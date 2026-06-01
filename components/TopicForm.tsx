@@ -106,14 +106,14 @@ export default function TopicForm({
         )}
       </button>
 
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
         {examples.map((ex) => (
           <button
             key={ex}
             type="button"
             onClick={() => handleExample(ex)}
             disabled={isLoading}
-            className="example-chip text-[11px] px-3 py-1.5 bg-transparent border border-[var(--border)] text-[var(--subtle)] disabled:opacity-40"
+            className="example-chip text-[11px] px-3 py-1.5 bg-transparent border border-[var(--border)] text-[var(--subtle)] disabled:opacity-40 whitespace-nowrap"
             style={{ fontFamily: "var(--font-space-mono)" }}
           >
             {ex}

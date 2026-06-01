@@ -50,7 +50,7 @@ export default function PlatformSelector({
   };
 
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
       {platforms.map((p, index) => {
         const isSelected = selected === p.id;
         return (
@@ -59,7 +59,7 @@ export default function PlatformSelector({
             onClick={() => onSelect(p.id)}
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={`
-              platform-card relative flex flex-col items-center gap-2 py-4 px-3 text-center
+              platform-card relative flex flex-col items-center gap-1.5 sm:gap-2 py-3 sm:py-4 px-2 sm:px-3 text-center
               ${
                 isSelected
                   ? "bg-[var(--accent)] text-white"
@@ -85,7 +85,7 @@ export default function PlatformSelector({
               {p.label}
             </span>
             <span
-              className={`text-[9px] sm:text-[10px] ${
+              className={`text-[8px] sm:text-[10px] leading-tight ${
                 isSelected ? "text-white/70" : "text-[var(--subtle)]"
               }`}
             >
