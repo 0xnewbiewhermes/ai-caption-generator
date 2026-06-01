@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import type { Platform, Tone, GenerateResponse } from "@/lib/mimo";
 import { saveToHistory, type HistoryItem } from "@/lib/history";
+import { canGenerate, incrementUsage, getRemainingGenerations, getDailyLimit } from "@/lib/usage";
 import PlatformSelector from "./PlatformSelector";
 import ToneSelector from "./ToneSelector";
 import TopicForm from "./TopicForm";
@@ -31,6 +32,12 @@ export default function CaptionGenerator() {
 
   const handleGenerate = useCallback(
     async (inputTopic: string) => {
+      // Check usage limit
+      if (!canGenerate()) {
+        setError(`Batas ${getDailyLimit()}x generate per hari sudah habis. Coba lagi besok.`);
+        return;
+      }
+
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
@@ -102,6 +109,7 @@ export default function CaptionGenerator() {
                   tone,
                 };
                 setResult(finalResult);
+                incrementUsage();
                 saveToHistory({
                   topic: inputTopic,
                   platform,
@@ -264,6 +272,18 @@ export default function CaptionGenerator() {
           variantCount={variantCount}
           onVariantCountChange={setVariantCount}
         />
+        {/* Usage counter */}
+        <div className="flex items-center justify-between">
+          <span className="label">Sisa generate hari ini</span>
+          <span
+            className={`text-[11px] font-bold tabular-nums ${
+              getRemainingGenerations() <= 1 ? "text-[var(--accent)]" : "text-[var(--muted)]"
+            }`}
+            style={{ fontFamily: "var(--font-space-mono)" }}
+          >
+            {getRemainingGenerations()} / {getDailyLimit()}
+          </span>
+        </div>
       </div>
 
       {/* Error */}
