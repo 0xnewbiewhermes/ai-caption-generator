@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://aicaption.id/sitemap.xml
+Sitemap: https://www.aicaption.pro/sitemap.xml

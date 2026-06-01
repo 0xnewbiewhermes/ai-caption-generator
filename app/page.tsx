@@ -6,11 +6,21 @@ const jsonLd = {
   "@type": "WebApplication",
   name: "AI Caption",
   description:
-    "Cukup ketik topik. AI buatkan caption yang natural untuk Instagram, Twitter, dan TikTok.",
-  url: "https://aicaption.id",
+    "Generator caption AI gratis untuk Instagram, Twitter, dan TikTok. Ketik topik, AI tuliskan caption yang natural.",
+  url: "https://www.aicaption.pro",
   applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Web",
   offers: { "@type": "Offer", price: "0", priceCurrency: "IDR" },
   inLanguage: "id",
+  author: {
+    "@type": "Organization",
+    name: "AI Caption",
+    url: "https://www.aicaption.pro",
+  },
+  potentialAction: {
+    "@type": "UseAction",
+    target: "https://www.aicaption.pro",
+  },
 };
 
 export default function Home() {

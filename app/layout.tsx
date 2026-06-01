@@ -36,7 +36,7 @@ const instrumentSerif = Instrument_Serif({
   fallback: ["Georgia", "serif"],
 });
 
-const SITE_URL = "https://aicaption.id";
+const SITE_URL = "https://www.aicaption.pro";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -52,11 +52,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "AI Caption — Tulis Caption, Bukan Cuma Generate",
+    default: "AI Caption — Generator Caption Instagram, TikTok & Twitter Gratis",
     template: "%s | AI Caption",
   },
   description:
-    "Ketik topik apa aja. AI buatkan caption yang natural untuk Instagram, Twitter, dan TikTok. Gratis.",
+    "Buat caption Instagram, TikTok, dan Twitter yang natural dalam hitungan detik. Ketik topik apa aja, AI tuliskan captionnya. Gratis, tanpa login.",
   keywords: [
     "caption generator",
     "caption Instagram",
@@ -64,20 +64,36 @@ export const metadata: Metadata = {
     "caption Twitter",
     "AI caption Indonesia",
     "buat caption gratis",
+    "generator caption AI",
+    "caption otomatis",
+    "social media caption",
+    "copywriting AI",
   ],
   authors: [{ name: "AI Caption" }],
+  creator: "AI Caption",
+  publisher: "AI Caption",
+  category: "Technology",
   openGraph: {
     type: "website",
     locale: "id_ID",
     url: SITE_URL,
     siteName: "AI Caption",
-    title: "AI Caption — Tulis Caption, Bukan Cuma Generate",
-    description: "Ketik topik apa aja. AI buatkan caption yang natural. Gratis.",
+    title: "AI Caption — Generator Caption Instagram, TikTok & Twitter Gratis",
+    description: "Buat caption yang natural dalam hitungan detik. Ketik topik, AI tuliskan. Gratis, tanpa login.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Caption - Generator Caption Indonesia",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Caption — Tulis Caption, Bukan Cuma Generate",
-    description: "Ketik topik apa aja. AI buatkan caption yang natural. Gratis.",
+    title: "AI Caption — Generator Caption Instagram, TikTok & Twitter Gratis",
+    description: "Buat caption yang natural dalam hitungan detik. Ketik topik, AI tuliskan. Gratis, tanpa login.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
