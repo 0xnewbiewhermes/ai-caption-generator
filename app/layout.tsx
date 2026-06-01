@@ -122,6 +122,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="google-site-verification" content="vq8wUNbqD5UZSc0PYsZudJdE_l_ltVgCXH9NFTgemtY" />
       </head>
       <body className="min-h-screen flex flex-col">
         <a
