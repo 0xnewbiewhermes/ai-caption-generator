@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Space_Mono, Syne, Instrument_Serif } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
+
+const GA_ID = "G-XLSN9HDB9C";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -132,6 +135,18 @@ export default function RootLayout({
           Langsung ke konten
         </a>
         {children}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
