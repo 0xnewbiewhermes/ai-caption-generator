@@ -8,6 +8,8 @@ interface TopicFormProps {
   isLoading: boolean;
   topic: string;
   onTopicChange: (topic: string) => void;
+  variantCount: number;
+  onVariantCountChange: (count: number) => void;
 }
 
 const examples = [
@@ -24,6 +26,8 @@ export default function TopicForm({
   isLoading,
   topic,
   onTopicChange,
+  variantCount,
+  onVariantCountChange,
 }: TopicFormProps) {
   const setTopic = onTopicChange;
   const [elapsed, setElapsed] = useState(0);
@@ -105,6 +109,30 @@ export default function TopicForm({
           </>
         )}
       </button>
+
+      {/* Variant toggle */}
+      <div className="flex items-center justify-between">
+        <span className="label">Jumlah variasi</span>
+        <div className="flex gap-1">
+          {[1, 3].map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => onVariantCountChange(n)}
+              className={`
+                px-3 py-1.5 text-[10px] font-bold tracking-wide uppercase transition-colors
+                ${variantCount === n
+                  ? "bg-[var(--fg)] text-[var(--bg)]"
+                  : "bg-transparent border border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)]"
+                }
+              `}
+              style={{ fontFamily: "var(--font-space-mono)" }}
+            >
+              {n === 1 ? "1 caption" : "3 variasi"}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
         {examples.map((ex) => (

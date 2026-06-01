@@ -2,19 +2,30 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import type { Platform, Tone, GenerateResponse } from "@/lib/mimo";
+import { saveToHistory, type HistoryItem } from "@/lib/history";
 import PlatformSelector from "./PlatformSelector";
 import ToneSelector from "./ToneSelector";
 import TopicForm from "./TopicForm";
 import CaptionOutput from "./CaptionOutput";
+import VariantSelector from "./VariantSelector";
+import HistoryPanel from "./HistoryPanel";
 
 export default function CaptionGenerator() {
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [tone, setTone] = useState<Tone>("casual");
+  const [customTone, setCustomTone] = useState("");
   const [topic, setTopic] = useState("");
   const [result, setResult] = useState<GenerateResponse | null>(null);
   const [streamingText, setStreamingText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Variants state
+  const [variantCount, setVariantCount] = useState(1);
+  const [variants, setVariants] = useState<GenerateResponse[]>([]);
+  const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
+  const [streamingVariants, setStreamingVariants] = useState<{ index: number; text: string }[]>([]);
+
   const outputRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -28,6 +39,9 @@ export default function CaptionGenerator() {
       setError(null);
       setResult(null);
       setStreamingText("");
+      setVariants([]);
+      setSelectedVariant(null);
+      setStreamingVariants([]);
 
       try {
         const res = await fetch("/api/generate", {
@@ -37,7 +51,9 @@ export default function CaptionGenerator() {
             topic: inputTopic,
             platform,
             tone,
+            customTone: tone === "custom" ? customTone : undefined,
             stream: true,
+            count: variantCount,
           }),
           signal: controller.signal,
         });
@@ -67,24 +83,75 @@ export default function CaptionGenerator() {
 
           for (const line of lines) {
             if (!line.trim()) continue;
-            let event: { type: string; content: string; charCount?: number };
+            let event: { type: string; content: string; charCount?: number; index?: number };
             try {
               event = JSON.parse(line);
             } catch {
               continue;
             }
 
-            if (event.type === "chunk") {
-              setStreamingText((prev) => prev + event.content);
-            } else if (event.type === "done") {
-              setResult({
-                caption: event.content,
-                charCount: event.charCount ?? 0,
-                platform,
-                tone,
-              });
-            } else if (event.type === "error") {
-              throw new Error(event.content);
+            if (variantCount === 1) {
+              // Single variant mode — original behavior
+              if (event.type === "chunk") {
+                setStreamingText((prev) => prev + event.content);
+              } else if (event.type === "done") {
+                const finalResult = {
+                  caption: event.content,
+                  charCount: event.charCount ?? 0,
+                  platform,
+                  tone,
+                };
+                setResult(finalResult);
+                saveToHistory({
+                  topic: inputTopic,
+                  platform,
+                  tone,
+                  caption: finalResult.caption,
+                  charCount: finalResult.charCount,
+                });
+              } else if (event.type === "error") {
+                throw new Error(event.content);
+              }
+            } else {
+              // Multi-variant mode
+              const idx = event.index ?? 0;
+
+              if (event.type === "variant_start") {
+                setStreamingVariants((prev) => [...prev.filter((v) => v.index !== idx), { index: idx, text: "" }]);
+              } else if (event.type === "chunk") {
+                setStreamingVariants((prev) =>
+                  prev.map((v) => (v.index === idx ? { ...v, text: v.text + event.content } : v))
+                );
+              } else if (event.type === "variant_done") {
+                const variant: GenerateResponse = {
+                  caption: event.content,
+                  charCount: event.charCount ?? 0,
+                  platform,
+                  tone,
+                };
+                setVariants((prev) => {
+                  const next = [...prev];
+                  next[idx] = variant;
+                  return next;
+                });
+                setStreamingVariants((prev) => prev.filter((v) => v.index !== idx));
+
+                // Save first variant to history
+                if (idx === 0) {
+                  saveToHistory({
+                    topic: inputTopic,
+                    platform,
+                    tone,
+                    caption: variant.caption,
+                    charCount: variant.charCount,
+                  });
+                }
+              } else if (event.type === "all_done") {
+                // Auto-select first variant
+                setSelectedVariant(0);
+              } else if (event.type === "error") {
+                throw new Error(event.content);
+              }
             }
           }
         }
@@ -102,21 +169,23 @@ export default function CaptionGenerator() {
         }
         setResult(null);
         setStreamingText("");
+        setVariants([]);
+        setStreamingVariants([]);
       } finally {
         setIsLoading(false);
       }
     },
-    [platform, tone]
+    [platform, tone, customTone, variantCount]
   );
 
   useEffect(() => {
-    if (result || streamingText) {
+    if (result || streamingText || variants.length > 0) {
       outputRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
       });
     }
-  }, [result, streamingText]);
+  }, [result, streamingText, variants]);
 
   // Cleanup: abort fetch on unmount
   useEffect(() => {
@@ -130,6 +199,38 @@ export default function CaptionGenerator() {
       handleGenerate(topic.trim());
     }
   }, [topic, handleGenerate]);
+
+  const handleHistorySelect = useCallback((item: HistoryItem) => {
+    setTopic(item.topic);
+    setPlatform(item.platform);
+    if (item.tone !== "custom") setTone(item.tone);
+    setResult({
+      caption: item.caption,
+      charCount: item.charCount,
+      platform: item.platform,
+      tone: item.tone,
+    });
+    setVariants([]);
+    setSelectedVariant(null);
+  }, []);
+
+  const handleVariantSelect = useCallback(
+    (index: number) => {
+      setSelectedVariant(index);
+      const variant = variants[index];
+      if (variant) {
+        setResult(variant);
+        saveToHistory({
+          topic,
+          platform,
+          tone,
+          caption: variant.caption,
+          charCount: variant.charCount,
+        });
+      }
+    },
+    [variants, topic, platform, tone]
+  );
 
   return (
     <section
@@ -149,7 +250,7 @@ export default function CaptionGenerator() {
       <div className="space-y-3">
         <span className="label">Gaya bahasa</span>
         <div role="radiogroup" aria-label="Gaya bahasa caption">
-          <ToneSelector selected={tone} onSelect={setTone} />
+          <ToneSelector selected={tone} onSelect={setTone} customTone={customTone} onCustomToneChange={setCustomTone} />
         </div>
       </div>
 
@@ -160,6 +261,8 @@ export default function CaptionGenerator() {
           isLoading={isLoading}
           topic={topic}
           onTopicChange={setTopic}
+          variantCount={variantCount}
+          onVariantCountChange={setVariantCount}
         />
       </div>
 
@@ -173,8 +276,8 @@ export default function CaptionGenerator() {
         </div>
       )}
 
-      {/* Streaming output */}
-      {isLoading && streamingText && (
+      {/* Streaming output — single variant */}
+      {variantCount === 1 && isLoading && streamingText && (
         <div ref={outputRef} className="space-y-3 animate-in" aria-live="polite">
           <div className="flex items-center justify-between">
             <span className="label">Sedang menulis...</span>
@@ -194,8 +297,21 @@ export default function CaptionGenerator() {
         </div>
       )}
 
-      {/* Final output */}
-      {result && !isLoading && (
+      {/* Multi-variant output */}
+      {variantCount > 1 && (variants.length > 0 || streamingVariants.length > 0 || isLoading) && (
+        <div ref={outputRef} aria-live="polite">
+          <VariantSelector
+            variants={variants}
+            selected={selectedVariant}
+            onSelect={handleVariantSelect}
+            isLoading={isLoading}
+            streamingVariants={streamingVariants}
+          />
+        </div>
+      )}
+
+      {/* Final output — single variant */}
+      {variantCount === 1 && result && !isLoading && (
         <div ref={outputRef} aria-live="polite">
           <CaptionOutput
             result={result}
@@ -204,6 +320,20 @@ export default function CaptionGenerator() {
           />
         </div>
       )}
+
+      {/* Final output — selected variant */}
+      {variantCount > 1 && selectedVariant !== null && !isLoading && result && (
+        <div ref={outputRef} aria-live="polite">
+          <CaptionOutput
+            result={result}
+            onRegenerate={handleRegenerate}
+            isLoading={isLoading}
+          />
+        </div>
+      )}
+
+      {/* History */}
+      <HistoryPanel onSelect={handleHistorySelect} isLoading={isLoading} />
     </section>
   );
 }

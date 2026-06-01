@@ -1,12 +1,13 @@
 import OpenAI from "openai";
 
 export type Platform = "instagram" | "twitter" | "tiktok";
-export type Tone = "casual" | "professional" | "funny" | "motivational" | "storytelling" | "genz" | "poetic" | "educational" | "promo";
+export type Tone = "casual" | "professional" | "funny" | "motivational" | "storytelling" | "genz" | "poetic" | "educational" | "promo" | "custom";
 
 export interface GenerateRequest {
   topic: string;
   platform: Platform;
   tone: Tone;
+  customTone?: string;
 }
 
 export interface GenerateResponse {
@@ -113,8 +114,8 @@ async function expandTopic(topic: string, platform: Platform, tone: Tone): Promi
 }
 
 // Step 2: Generate caption from brief
-async function generateFromBrief(brief: string, platform: Platform, tone: Tone): Promise<string> {
-  const systemPrompt = getSystemPrompt(platform, tone);
+async function generateFromBrief(brief: string, platform: Platform, tone: Tone, customTone?: string): Promise<string> {
+  const systemPrompt = getSystemPrompt(platform, tone, customTone);
 
   return callWithFallback(async (provider) => {
     const completion = await provider.client.chat.completions.create({
@@ -207,11 +208,11 @@ export async function generateCaption(req: GenerateRequest): Promise<GenerateRes
     brief = req.topic;
   }
 
-  let caption = await generateFromBrief(brief, req.platform, req.tone);
+  let caption = await generateFromBrief(brief, req.platform, req.tone, req.customTone);
 
   // Retry only if caption is empty (not for short captions — model may have refused)
   if (!caption) {
-    caption = await generateFromBrief(brief, req.platform, req.tone);
+    caption = await generateFromBrief(brief, req.platform, req.tone, req.customTone);
   }
 
   const limit = CHAR_LIMITS[req.platform];
@@ -241,7 +242,7 @@ export async function* generateCaptionStream(
   yield { type: "brief", content: needsExpansion ? brief : "" };
 
   // Stream with fallback
-  const systemPrompt = getSystemPrompt(req.platform, req.tone);
+  const systemPrompt = getSystemPrompt(req.platform, req.tone, req.customTone);
   let fullCaption = "";
   let streamSucceeded = false;
 
@@ -278,7 +279,7 @@ export async function* generateCaptionStream(
   // Fallback: if all streaming failed, retry with non-streaming
   if (!streamSucceeded || !fullCaption.trim()) {
     console.warn("[Provider] Streaming empty/failed, retrying non-streaming");
-    const retryCaption = await generateFromBrief(brief, req.platform, req.tone);
+    const retryCaption = await generateFromBrief(brief, req.platform, req.tone, req.customTone);
     if (retryCaption.trim()) {
       fullCaption = retryCaption;
     }
@@ -295,9 +296,9 @@ export async function* generateCaptionStream(
   };
 }
 
-function getSystemPrompt(platform: Platform, tone: Tone): string {
+function getSystemPrompt(platform: Platform, tone: Tone, customTone?: string): string {
   const platformRules = PLATFORM_RULES[platform];
-  const toneGuide = TONE_GUIDES[tone];
+  const toneGuide = tone === "custom" && customTone ? customTone : TONE_GUIDES[tone];
 
   return `Bikin caption ${platformRules.label} dari brief. Bahasa Indonesia natural.
 
@@ -333,4 +334,5 @@ const TONE_GUIDES: Record<Tone, string> = {
   poetic: "Puitis, diksi indah, metafora. Cocok untuk konten emosional.",
   educational: "Informatif, terstruktur, mudah dipahami. Boleh numbering/bullet.",
   promo: "CTA kuat, urgency, highlight benefit. Untuk diskon/promo/launch.",
+  custom: "", // Handled by customTone parameter
 };

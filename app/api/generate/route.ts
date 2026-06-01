@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateCaption, generateCaptionStream, type Platform, type Tone } from "@/lib/mimo";
 
 const VALID_PLATFORMS: Platform[] = ["instagram", "twitter", "tiktok"];
-const VALID_TONES: Tone[] = ["casual", "professional", "funny", "motivational", "storytelling", "genz", "poetic", "educational", "promo"];
+const VALID_TONES: Tone[] = ["casual", "professional", "funny", "motivational", "storytelling", "genz", "poetic", "educational", "promo", "custom"];
 
 // In-memory rate limiting (per instance on serverless)
 // Note: On Vercel, each serverless instance has its own memory.
@@ -59,7 +59,8 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { topic, platform, tone, stream: useStream } = body;
+    const { topic, platform, tone, customTone, stream: useStream, count: variantCount } = body;
+    const count = Math.min(Math.max(Number(variantCount) || 1, 1), 3);
 
     // Validation
     if (!topic || typeof topic !== "string") {
@@ -85,9 +86,25 @@ export async function POST(req: NextRequest) {
 
     if (!tone || !VALID_TONES.includes(tone)) {
       return NextResponse.json(
-        { error: "Tone tidak valid. Pilih: casual, professional, funny, motivational, storytelling, genz, poetic, educational, promo." },
+        { error: "Tone tidak valid. Pilih: casual, professional, funny, motivational, storytelling, genz, poetic, educational, promo, custom." },
         { status: 400 }
       );
+    }
+
+    // Validate custom tone
+    if (tone === "custom") {
+      if (!customTone || typeof customTone !== "string" || customTone.trim().length === 0) {
+        return NextResponse.json(
+          { error: "Deskripsi gaya bahasa wajib diisi untuk tone custom." },
+          { status: 400 }
+        );
+      }
+      if (customTone.length > 200) {
+        return NextResponse.json(
+          { error: "Deskripsi gaya bahasa maksimal 200 karakter." },
+          { status: 400 }
+        );
+      }
     }
 
     // Streaming mode
@@ -96,12 +113,32 @@ export async function POST(req: NextRequest) {
       const abortController = new AbortController();
       req.signal.addEventListener("abort", () => abortController.abort());
 
+      const reqData = { topic, platform, tone, customTone: tone === "custom" ? customTone : undefined };
+
       const stream = new ReadableStream({
         async start(controller) {
           try {
-            for await (const event of generateCaptionStream({ topic, platform, tone })) {
-              if (abortController.signal.aborted) break;
-              controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
+            if (count === 1) {
+              // Single variant — original streaming behavior
+              for await (const event of generateCaptionStream(reqData)) {
+                if (abortController.signal.aborted) break;
+                controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
+              }
+            } else {
+              // Multiple variants — generate sequentially (to avoid rate limits)
+              for (let i = 0; i < count; i++) {
+                if (abortController.signal.aborted) break;
+                controller.enqueue(encoder.encode(JSON.stringify({ type: "variant_start", index: i }) + "\n"));
+                for await (const event of generateCaptionStream(reqData)) {
+                  if (abortController.signal.aborted) break;
+                  if (event.type === "chunk") {
+                    controller.enqueue(encoder.encode(JSON.stringify({ ...event, index: i }) + "\n"));
+                  } else if (event.type === "done") {
+                    controller.enqueue(encoder.encode(JSON.stringify({ ...event, type: "variant_done", index: i }) + "\n"));
+                  }
+                }
+              }
+              controller.enqueue(encoder.encode(JSON.stringify({ type: "all_done" }) + "\n"));
             }
             controller.close();
           } catch (err) {
