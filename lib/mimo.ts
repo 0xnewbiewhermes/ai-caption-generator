@@ -26,7 +26,7 @@ interface ProviderConfig {
 
 const providers: ProviderConfig[] = [];
 
-// Primary: Groq
+// Primary: Groq (GPT OSS 120B)
 if (process.env.GROQ_API_KEY) {
   providers.push({
     name: "groq",
@@ -35,7 +35,7 @@ if (process.env.GROQ_API_KEY) {
       baseURL: "https://api.groq.com/openai/v1",
       timeout: 30000,
     }),
-    model: "llama-3.3-70b-versatile",
+    model: "openai/gpt-oss-120b",
   });
 } else {
   console.warn("[Provider] GROQ_API_KEY not set");
