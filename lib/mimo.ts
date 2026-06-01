@@ -16,67 +16,125 @@ export interface GenerateResponse {
   tone: Tone;
 }
 
-if (!process.env.MIMO_API_KEY) {
-  console.error("[MiMo] MIMO_API_KEY environment variable is not set");
+// ── Provider Config ──
+
+interface ProviderConfig {
+  name: string;
+  client: OpenAI;
+  model: string;
 }
 
-const mimo = new OpenAI({
-  apiKey: process.env.MIMO_API_KEY,
-  baseURL: "https://token-plan-sgp.xiaomimimo.com/v1",
-  timeout: 25000,
-});
+const providers: ProviderConfig[] = [];
+
+// Primary: Groq
+if (process.env.GROQ_API_KEY) {
+  providers.push({
+    name: "groq",
+    client: new OpenAI({
+      apiKey: process.env.GROQ_API_KEY,
+      baseURL: "https://api.groq.com/openai/v1",
+      timeout: 30000,
+    }),
+    model: "llama-3.3-70b-versatile",
+  });
+} else {
+  console.warn("[Provider] GROQ_API_KEY not set");
+}
+
+// Fallback: MiMo
+if (process.env.MIMO_API_KEY) {
+  providers.push({
+    name: "mimo",
+    client: new OpenAI({
+      apiKey: process.env.MIMO_API_KEY,
+      baseURL: "https://token-plan-sgp.xiaomimimo.com/v1",
+      timeout: 25000,
+    }),
+    model: "mimo-v2.5",
+  });
+} else {
+  console.warn("[Provider] MIMO_API_KEY not set");
+}
+
+if (providers.length === 0) {
+  console.error("[Provider] No API keys configured! Set GROQ_API_KEY or MIMO_API_KEY");
+}
+
+// ── Provider Wrapper with Fallback ──
+
+async function callWithFallback<T>(
+  fn: (provider: ProviderConfig) => Promise<T>,
+  label: string
+): Promise<T> {
+  let lastError: Error | null = null;
+
+  for (const provider of providers) {
+    try {
+      return await fn(provider);
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      console.warn(`[${provider.name}] ${label} failed, trying next:`, lastError.message);
+    }
+  }
+
+  throw lastError || new Error(`All providers failed for ${label}`);
+}
 
 // Step 1: Expand short input into brief (concise, fast)
 async function expandTopic(topic: string, platform: Platform, tone: Tone): Promise<string> {
   const platformLabel = PLATFORM_RULES[platform].label;
 
-  const completion = await mimo.chat.completions.create({
-    model: "mimo-v2.5",
-    messages: [
-      {
-        role: "system",
-        content: `Ubah input jadi brief caption ${platformLabel} singkat. Isi: topik, audience, hook, 2-3 poin kunci. Maksimal 150 kata. Bahasa Indonesia. Langsung brief, tanpa pembuka.`
-      },
-      {
-        role: "user",
-        content: topic,
-      },
-    ],
-    max_completion_tokens: 3000,
-    temperature: 0.7,
-    top_p: 0.9,
-    stream: false,
-  });
+  return callWithFallback(async (provider) => {
+    const completion = await provider.client.chat.completions.create({
+      model: provider.model,
+      messages: [
+        {
+          role: "system",
+          content: `Ubah input jadi brief caption ${platformLabel} singkat. Isi: topik, audience, hook, 2-3 poin kunci. Maksimal 150 kata. Bahasa Indonesia. Langsung brief, tanpa pembuka.`
+        },
+        {
+          role: "user",
+          content: topic,
+        },
+      ],
+      max_completion_tokens: 3000,
+      temperature: 0.7,
+      top_p: 0.9,
+      stream: false,
+    });
 
-  const content = completion.choices[0]?.message?.content?.trim();
-  if (!content) {
-    console.warn("[MiMo] Empty expansion, using raw topic", { platform, tone, finishReason: completion.choices[0]?.finish_reason });
-    return topic;
-  }
-  return content;
+    const content = completion.choices[0]?.message?.content?.trim();
+    if (!content) {
+      console.warn(`[${provider.name}] Empty expansion, using raw topic`, { platform, tone, finishReason: completion.choices[0]?.finish_reason });
+      return topic;
+    }
+    return content;
+  }, "expandTopic");
 }
 
 // Step 2: Generate caption from brief
 async function generateFromBrief(brief: string, platform: Platform, tone: Tone): Promise<string> {
   const systemPrompt = getSystemPrompt(platform, tone);
 
-  const completion = await mimo.chat.completions.create({
-    model: "mimo-v2.5",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: brief },
-    ],
-    max_completion_tokens: 4000,
-    temperature: 0.9,
-    top_p: 0.95,
-    stream: false,
-  });
+  return callWithFallback(async (provider) => {
+    const completion = await provider.client.chat.completions.create({
+      model: provider.model,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: brief },
+      ],
+      max_completion_tokens: 4000,
+      temperature: 0.9,
+      top_p: 0.95,
+      stream: false,
+    });
 
-  const content = completion.choices[0]?.message?.content?.trim() || "";
-  if (!content) {
-    console.warn("[MiMo] Empty caption", { platform, tone, finishReason: completion.choices[0]?.finish_reason });
-  }
-  return content;
+    const content = completion.choices[0]?.message?.content?.trim() || "";
+    if (!content) {
+      console.warn(`[${provider.name}] Empty caption`, { platform, tone, finishReason: completion.choices[0]?.finish_reason });
+    }
+    return content;
+  }, "generateFromBrief");
 }
 
 // Platform character limits
@@ -182,32 +240,44 @@ export async function* generateCaptionStream(
 
   yield { type: "brief", content: needsExpansion ? brief : "" };
 
-  // Stream the caption generation
+  // Stream with fallback
   const systemPrompt = getSystemPrompt(req.platform, req.tone);
-  const stream = await mimo.chat.completions.create({
-    model: "mimo-v2.5",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: brief },
-    ],
-    max_completion_tokens: 4000,
-    temperature: 0.9,
-    top_p: 0.95,
-    stream: true,
-  });
-
   let fullCaption = "";
-  for await (const chunk of stream) {
-    const delta = chunk.choices[0]?.delta?.content;
-    if (delta) {
-      fullCaption += delta;
-      yield { type: "chunk", content: delta };
+  let streamSucceeded = false;
+
+  for (const provider of providers) {
+    try {
+      const stream = await provider.client.chat.completions.create({
+        model: provider.model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: brief },
+        ],
+        max_completion_tokens: 4000,
+        temperature: 0.9,
+        top_p: 0.95,
+        stream: true,
+      });
+
+      for await (const chunk of stream) {
+        const delta = chunk.choices[0]?.delta?.content;
+        if (delta) {
+          fullCaption += delta;
+          yield { type: "chunk", content: delta };
+        }
+      }
+
+      streamSucceeded = true;
+      break;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.warn(`[${provider.name}] Stream failed, trying next:`, msg);
     }
   }
 
-  // Fallback: if streaming returned empty caption, retry with non-streaming
-  if (!fullCaption.trim()) {
-    console.warn("[MiMo] Streaming empty, retrying non-streaming", { platform: req.platform, tone: req.tone });
+  // Fallback: if all streaming failed, retry with non-streaming
+  if (!streamSucceeded || !fullCaption.trim()) {
+    console.warn("[Provider] Streaming empty/failed, retrying non-streaming");
     const retryCaption = await generateFromBrief(brief, req.platform, req.tone);
     if (retryCaption.trim()) {
       fullCaption = retryCaption;
