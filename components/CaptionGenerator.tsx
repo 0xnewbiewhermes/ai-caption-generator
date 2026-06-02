@@ -300,7 +300,7 @@ export default function CaptionGenerator() {
       {variantCount === 1 && isLoading && streamingText && (
         <div ref={outputRef} className="space-y-3 animate-in" aria-live="polite">
           <div className="flex items-center justify-between">
-            <span className="label">Sedang menulis...</span>
+            <span className="label">Sedang menulis…</span>
             <span
               className="text-[10px] text-[var(--muted)]"
               style={{ fontFamily: "var(--font-space-mono)" }}

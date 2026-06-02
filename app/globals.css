@@ -238,7 +238,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.01em;
   border-radius: 9999px;
-  transition: all 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
   cursor: pointer;
   border: none;
   outline: none;
@@ -444,7 +444,7 @@ section {
 
 /* ── Platform card hover ── */
 .platform-card {
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   border-radius: 14px;
 }
 
@@ -455,7 +455,7 @@ section {
 
 /* ── Tone pill ── */
 .tone-pill {
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out, background-color 0.2s ease-in-out;
   border-radius: 9999px;
 }
 
@@ -465,7 +465,7 @@ section {
 
 /* ── Example chip ── */
 .example-chip {
-  transition: all 0.2s ease-in-out;
+  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
   border-radius: 9999px;
 }
 

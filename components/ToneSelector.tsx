@@ -75,7 +75,7 @@ export default function ToneSelector({
           <textarea
             value={customTone}
             onChange={(e) => onCustomToneChange(e.target.value)}
-            placeholder="Deskripsikan gaya bahasa yang kamu mau... contoh: 'Saya influencer skincare, target cewek 20-30, friendly tapi edukatif'"
+            placeholder="Deskripsikan gaya bahasa yang kamu mau… contoh: 'Saya influencer skincare, target cewek 20-30, friendly tapi edukatif'"
             maxLength={200}
             rows={2}
             className="input resize-none text-sm"

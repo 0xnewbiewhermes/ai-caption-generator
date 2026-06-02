@@ -64,7 +64,7 @@ export default function TopicForm({
           id="topic"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          placeholder="Tulis topik apa aja..."
+          placeholder="Tulis topik apa aja…"
           maxLength={500}
           rows={3}
           className="input resize-none"
@@ -99,7 +99,7 @@ export default function TopicForm({
                   {elapsed}s
                 </span>
               )}
-              ...
+              …
             </span>
           </>
         ) : (
@@ -120,7 +120,7 @@ export default function TopicForm({
               type="button"
               onClick={() => onVariantCountChange(n)}
               className={`
-                px-3.5 py-1.5 text-[10px] font-bold tracking-wide uppercase transition-all
+                px-3.5 py-1.5 text-[10px] font-bold tracking-wide uppercase transition-[background-color,color,box-shadow,border-color]
                 ${variantCount === n
                   ? "bg-[var(--accent)] text-white shadow-[var(--shadow-sm)]"
                   : "bg-transparent border border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)] hover:border-[var(--subtle)]"

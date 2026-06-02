@@ -95,7 +95,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`px-3 py-1 text-[10px] font-bold tracking-wide uppercase transition-all ${
+                  className={`px-3 py-1 text-[10px] font-bold tracking-wide uppercase transition-[background-color,color] ${
                     filter === f
                       ? "bg-[var(--accent)] text-white"
                       : "text-[var(--muted)] hover:text-[var(--fg)]"
@@ -153,7 +153,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
                     <button
                       onClick={() => handleCopy(item)}
                       className="p-1.5 text-[var(--muted)] hover:text-[var(--fg)] transition-colors"
-                      title="Copy"
+                      aria-label="Copy caption"
                     >
                       {copiedId === item.id ? <IconCheck className="w-3 h-3" /> : <IconCopy className="w-3 h-3" />}
                     </button>
@@ -162,21 +162,21 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
                       className={`p-1.5 transition-colors ${
                         item.favorite ? "text-[var(--red)]" : "text-[var(--muted)] hover:text-[var(--red)]"
                       }`}
-                      title="Favorite"
+                      aria-label={item.favorite ? "Hapus dari favorit" : "Tambah ke favorit"}
                     >
                       {item.favorite ? "★" : "☆"}
                     </button>
                     <button
                       onClick={() => onSelect(item)}
                       className="p-1.5 text-[var(--muted)] hover:text-[var(--fg)] transition-colors"
-                      title="Pakai lagi"
+                      aria-label="Pakai lagi"
                     >
                       <IconArrowRight className="w-3 h-3" />
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="p-1.5 text-[var(--subtle)] hover:text-[var(--red)] transition-colors"
-                      title="Hapus"
+                      aria-label="Hapus caption"
                     >
                       ×
                     </button>

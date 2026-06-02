@@ -62,10 +62,11 @@ export default function VariantSelector({
           const isStreaming = !variant && streaming && isLoading;
 
           return (
-            <div
+            <button
               key={index}
+              type="button"
               className={`
-                card p-4 border-l-[3px] cursor-pointer transition-all
+                card p-4 border-l-[3px] cursor-pointer transition-[border-color,box-shadow,opacity] text-left w-full
                 ${isSelected
                   ? "border-l-[var(--accent)] ring-1 ring-[var(--accent)]/20 shadow-[var(--shadow-md)]"
                   : "border-l-[var(--border)] hover:border-l-[var(--yellow-fg)]"
@@ -73,6 +74,8 @@ export default function VariantSelector({
                 ${!hasContent ? "opacity-40" : ""}
               `}
               onClick={() => variant && onSelect(index)}
+              disabled={!variant}
+              aria-label={`Varian ${index + 1}${variant ? `, ${variant.charCount} karakter` : ", menunggu"}`}
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-2">
@@ -93,6 +96,7 @@ export default function VariantSelector({
                         handleCopy(variant.caption, index);
                       }}
                       className="p-1 text-[var(--muted)] hover:text-[var(--fg)] transition-colors"
+                      aria-label={`Copy varian ${index + 1}`}
                     >
                       {copiedIndex === index ? <IconCheck className="w-3 h-3" /> : <IconCopy className="w-3 h-3" />}
                     </button>
@@ -108,10 +112,10 @@ export default function VariantSelector({
                 </pre>
               ) : (
                 <div className="text-sm text-[var(--subtle)] italic">
-                  Menunggu...
+                  Menunggu…
                 </div>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
