@@ -62,7 +62,7 @@ export default function CaptionOutput({
         <span
           className={`text-[10px] tabular-nums ${
             isOverLimit
-              ? "text-[var(--accent)] font-bold"
+              ? "text-[var(--red)] font-bold"
               : "text-[var(--subtle)]"
           }`}
           style={{ fontFamily: "var(--font-space-mono)" }}
@@ -74,13 +74,13 @@ export default function CaptionOutput({
 
       {/* Caption */}
       <div className="card p-5 border-l-[3px] border-l-[var(--accent)]">
-        <pre className="whitespace-pre-wrap text-sm text-[var(--fg)] font-sans leading-relaxed">
+        <pre className="whitespace-pre-wrap text-sm text-[var(--fg)] leading-relaxed" style={{ fontFamily: "var(--font-inter)" }}>
           {result.caption}
         </pre>
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <button onClick={handleCopy} className="btn btn-primary flex-1">
           {copied ? (
             <>

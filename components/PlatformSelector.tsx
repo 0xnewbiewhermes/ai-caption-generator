@@ -50,7 +50,7 @@ export default function PlatformSelector({
   };
 
   return (
-    <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+    <div className="grid grid-cols-3 gap-2 sm:gap-3">
       {platforms.map((p, index) => {
         const isSelected = selected === p.id;
         return (
@@ -59,11 +59,11 @@ export default function PlatformSelector({
             onClick={() => onSelect(p.id)}
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={`
-              platform-card relative flex flex-col items-center gap-1.5 sm:gap-2 py-3 sm:py-4 px-2 sm:px-3 text-center
+              platform-card relative flex flex-col items-center gap-2 py-4 sm:py-5 px-2 sm:px-3 text-center
               ${
                 isSelected
-                  ? "bg-[var(--accent)] text-white"
-                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--muted)] hover:border-[var(--subtle)] hover:text-[var(--fg)]"
+                  ? "bg-[var(--accent)] text-white shadow-[var(--shadow-md)]"
+                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--muted)] hover:border-[var(--subtle)] hover:text-[var(--fg)] shadow-[var(--shadow-sm)]"
               }
             `}
             data-selected={isSelected}
@@ -72,9 +72,6 @@ export default function PlatformSelector({
             tabIndex={isSelected ? 0 : -1}
             aria-label={p.label}
           >
-            {isSelected && (
-              <div className="absolute top-0 left-0 w-full h-[2px] bg-[var(--yellow)]" />
-            )}
             <span className={isSelected ? "text-white" : "text-[var(--muted)]"}>
               {p.icon}
             </span>

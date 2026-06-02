@@ -59,7 +59,7 @@ export default function TopicForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="topic" className="label mb-1.5 block">Topik</label>
+        <label htmlFor="topic" className="label mb-2 block">Topik</label>
         <textarea
           id="topic"
           value={topic}
@@ -70,7 +70,7 @@ export default function TopicForm({
           className="input resize-none"
           disabled={isLoading}
         />
-        <div className="flex items-center justify-between mt-1.5">
+        <div className="flex items-center justify-between mt-2">
           <span className="sr-only">Jumlah karakter</span>
           <span
             className="text-[10px] text-[var(--subtle)] tabular-nums"
@@ -113,20 +113,20 @@ export default function TopicForm({
       {/* Variant toggle */}
       <div className="flex items-center justify-between">
         <span className="label">Jumlah variasi</span>
-        <div className="flex gap-1">
+        <div className="flex gap-1.5">
           {[1, 3].map((n) => (
             <button
               key={n}
               type="button"
               onClick={() => onVariantCountChange(n)}
               className={`
-                px-3 py-1.5 text-[10px] font-bold tracking-wide uppercase transition-colors
+                px-3.5 py-1.5 text-[10px] font-bold tracking-wide uppercase transition-all
                 ${variantCount === n
-                  ? "bg-[var(--fg)] text-[var(--bg)]"
-                  : "bg-transparent border border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)]"
+                  ? "bg-[var(--accent)] text-white shadow-[var(--shadow-sm)]"
+                  : "bg-transparent border border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)] hover:border-[var(--subtle)]"
                 }
               `}
-              style={{ fontFamily: "var(--font-space-mono)" }}
+              style={{ fontFamily: "var(--font-space-mono)", borderRadius: "9999px" }}
             >
               {n === 1 ? "1 caption" : "3 variasi"}
             </button>
@@ -141,7 +141,7 @@ export default function TopicForm({
             type="button"
             onClick={() => handleExample(ex)}
             disabled={isLoading}
-            className="example-chip text-[11px] px-3 py-1.5 bg-transparent border border-[var(--border)] text-[var(--subtle)] disabled:opacity-40 whitespace-nowrap"
+            className="example-chip text-[11px] px-3.5 py-1.5 bg-transparent border border-[var(--border)] text-[var(--subtle)] disabled:opacity-40 whitespace-nowrap"
             style={{ fontFamily: "var(--font-space-mono)" }}
           >
             {ex}

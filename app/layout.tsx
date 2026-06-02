@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Space_Mono, Syne, Instrument_Serif } from "next/font/google";
+import { Inter, Space_Mono, Syne, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
 const GA_ID = "G-XLSN9HDB9C";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
   preload: true,
@@ -47,8 +47,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#faf8f4" },
-    { media: "(prefers-color-scheme: dark)", color: "#faf8f4" },
+    { media: "(prefers-color-scheme: light)", color: "#FFFCEC" },
+    { media: "(prefers-color-scheme: dark)", color: "#FFFCEC" },
   ],
 };
 
@@ -120,7 +120,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${dmSans.variable} ${spaceMono.variable} ${syne.variable} ${instrumentSerif.variable} h-full antialiased`}
+      className={`${inter.variable} ${spaceMono.variable} ${syne.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       <head>
         <link rel="manifest" href="/manifest.json" />

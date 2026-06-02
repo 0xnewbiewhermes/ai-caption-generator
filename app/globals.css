@@ -1,26 +1,37 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════
-   EDITORIAL STUDIO — Light, warm, sharp
+   ARC-INSPIRED — Warm, clean, pill-shaped
+   Based on arc.net exact design tokens
    ══════════════════════════════════════════ */
 
 :root {
-  --bg: #faf8f4;
-  --bg-warm: #f5f2ec;
-  --fg: #1a1816;
-  --fg-dim: #4a443c;
-  --muted: #8a8078;
-  --subtle: #b5aea5;
-  --border: #e8e4de;
-  --border-dark: #d4cfc7;
-  --surface: #ffffff;
-  --surface-hover: #faf8f4;
-  --accent: #c9371a;
-  --accent-hover: #b52e14;
-  --accent-light: #fef0ec;
-  --accent-fg: #ffffff;
-  --yellow: #b8860b;
-  --yellow-light: #fdf6e3;
+  --bg: #FFFCEC;
+  --bg-warm: #FFF8E0;
+  --fg: #000000;
+  --fg-dim: #1a1a1a;
+  --muted: #555555;
+  --subtle: #888888;
+  --border: #E5E0D4;
+  --border-dark: #D0CABC;
+  --surface: #FFFFFF;
+  --surface-hover: #FFFCEC;
+  --accent: #3139FB;
+  --accent-hover: #252DE0;
+  --accent-light: rgba(49, 57, 251, 0.08);
+  --accent-fg: #FFFFFF;
+  --red: #FB3A4D;
+  --red-light: rgba(251, 58, 77, 0.08);
+  --dark-blue: #000354;
+  --deep-blue: #2404AA;
+  --yellow-fg: #FFB223;
+  --yellow-bg: #FEF4D5;
+  --indigo-fg: #0047FF;
+  --indigo-bg: #F0F1FF;
+  --focus-outline: #96C4FF;
+  --shadow-sm: 0 5px 10px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.12);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
@@ -30,7 +41,7 @@
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--fg);
-  --font-sans: var(--font-dm-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-space-mono);
 }
 
@@ -50,7 +61,7 @@ html {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
   min-height: 100dvh;
@@ -60,19 +71,6 @@ body {
   padding-right: var(--safe-right);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* ── Film Grain Overlay ── */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.02;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
 }
 
 /* ── Touch Targets ── */
@@ -100,23 +98,26 @@ body::before {
 }
 
 /* ══════════════════════════════════════════
-   TYPOGRAPHY — Editorial hierarchy
+   TYPOGRAPHY — Arc-style hierarchy
+   Display: Syne (closest to Marlin available)
+   Body: Inter
+   Mono: Space Mono (closest to ABC Favorit Mono)
    ══════════════════════════════════════════ */
 
 .display {
-  font-family: var(--font-syne), sans-serif;
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-family: var(--font-syne), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.04em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
   color: var(--fg);
 }
 
 @media (max-width: 480px) {
   .display {
-    font-size: clamp(1.8rem, 8vw, 2.8rem);
-    line-height: 1.05;
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    line-height: 1.1;
     letter-spacing: -0.02em;
   }
 }
@@ -132,7 +133,7 @@ body::before {
 }
 
 .label {
-  font-family: var(--font-space-mono), monospace;
+  font-family: var(--font-space-mono), Menlo, Monaco, monospace;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -141,7 +142,7 @@ body::before {
 }
 
 .section-number {
-  font-family: var(--font-syne), sans-serif;
+  font-family: var(--font-syne), -apple-system, sans-serif;
   font-size: clamp(4rem, 10vw, 8rem);
   font-weight: 900;
   line-height: 1;
@@ -151,13 +152,13 @@ body::before {
 }
 
 /* ══════════════════════════════════════════
-   ANIMATIONS — Staggered, purposeful
+   ANIMATIONS — Smooth, purposeful
    ══════════════════════════════════════════ */
 
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -222,7 +223,7 @@ body::before {
 }
 
 /* ══════════════════════════════════════════
-   COMPONENTS — Sharp, editorial
+   COMPONENTS — Pill, clean, Arc-style
    ══════════════════════════════════════════ */
 
 /* ── Buttons ── */
@@ -231,13 +232,13 @@ body::before {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  font-family: var(--font-dm-sans), sans-serif;
-  font-size: 13px;
+  padding: 14px 28px;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  border-radius: 0;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.01em;
+  border-radius: 9999px;
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
   border: none;
   outline: none;
@@ -246,18 +247,20 @@ body::before {
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus-outline);
   outline-offset: 2px;
 }
 
 .btn-primary {
   background: var(--accent);
   color: var(--accent-fg);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-primary:active {
@@ -268,17 +271,20 @@ body::before {
   opacity: 0.35;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 .btn-secondary {
   background: var(--surface);
   color: var(--fg);
-  border: 1px solid var(--border-dark);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
   border-color: var(--accent);
   color: var(--accent);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-ghost {
@@ -294,20 +300,21 @@ body::before {
 /* ── Inputs ── */
 .input {
   width: 100%;
-  padding: 14px 16px;
-  font-family: var(--font-dm-sans), sans-serif;
-  font-size: 14px;
+  padding: 14px 18px;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
   background: var(--surface);
-  border: 1px solid var(--border-dark);
-  border-radius: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   color: var(--fg);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
+  box-shadow: var(--shadow-sm);
 }
 
 .input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent);
+  box-shadow: 0 0 0 3px rgba(49, 57, 251, 0.15);
 }
 
 .input::placeholder {
@@ -323,17 +330,17 @@ body::before {
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 0;
+  border-radius: 16px;
   position: relative;
-  box-shadow: 0 1px 3px rgba(26, 24, 22, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .card-accent {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 0;
-  box-shadow: 0 1px 3px rgba(26, 24, 22, 0.04);
+  border-radius: 16px;
+  position: relative;
+  box-shadow: var(--shadow-md);
 }
 
 /* ── Tags ── */
@@ -342,15 +349,15 @@ body::before {
   align-items: center;
   gap: 4px;
   padding: 4px 12px;
-  font-family: var(--font-space-mono), monospace;
+  font-family: var(--font-space-mono), Menlo, Monaco, monospace;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  border-radius: 0;
+  border-radius: 9999px;
   background: var(--accent-light);
   color: var(--accent);
-  border: 1px solid rgba(201, 55, 26, 0.15);
+  border: 1px solid rgba(49, 57, 251, 0.12);
 }
 
 /* ── Accent Line ── */
@@ -358,6 +365,7 @@ body::before {
   width: 48px;
   height: 3px;
   background: var(--accent);
+  border-radius: 2px;
   transform-origin: left;
   animation: accent-line-grow 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -371,7 +379,7 @@ body::before {
 
 /* ── Selection ── */
 ::selection {
-  background: rgba(201, 55, 26, 0.15);
+  background: rgba(49, 57, 251, 0.15);
   color: var(--fg);
 }
 
@@ -394,9 +402,10 @@ header {
   position: sticky;
   top: 0;
   z-index: 50;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: rgba(250, 248, 244, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255, 252, 236, 0.85);
+  border-bottom: 1px solid var(--border);
 }
 
 section {
@@ -405,13 +414,12 @@ section {
 
 /* ── Watermark ── */
 .watermark {
-  font-family: var(--font-syne), sans-serif;
+  font-family: var(--font-syne), -apple-system, sans-serif;
   font-size: clamp(12rem, 25vw, 22rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.06em;
-  color: var(--border);
-  opacity: 0.5;
+  color: rgba(0, 0, 0, 0.03);
   user-select: none;
   pointer-events: none;
   text-transform: uppercase;
@@ -431,21 +439,24 @@ section {
   margin-left: 2px;
   vertical-align: text-bottom;
   animation: blink 1s step-end infinite;
+  border-radius: 1px;
 }
 
 /* ── Platform card hover ── */
 .platform-card {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease-in-out;
+  border-radius: 14px;
 }
 
 .platform-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(26, 24, 22, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 /* ── Tone pill ── */
 .tone-pill {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease-in-out;
+  border-radius: 9999px;
 }
 
 .tone-pill:hover {
@@ -454,7 +465,8 @@ section {
 
 /* ── Example chip ── */
 .example-chip {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease-in-out;
+  border-radius: 9999px;
 }
 
 .example-chip:hover {

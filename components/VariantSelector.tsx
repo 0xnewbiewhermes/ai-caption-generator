@@ -66,7 +66,10 @@ export default function VariantSelector({
               key={index}
               className={`
                 card p-4 border-l-[3px] cursor-pointer transition-all
-                ${isSelected ? "border-l-[var(--accent)] ring-1 ring-[var(--accent)]" : "border-l-[var(--border)] hover:border-l-[var(--yellow)]"}
+                ${isSelected
+                  ? "border-l-[var(--accent)] ring-1 ring-[var(--accent)]/20 shadow-[var(--shadow-md)]"
+                  : "border-l-[var(--border)] hover:border-l-[var(--yellow-fg)]"
+                }
                 ${!hasContent ? "opacity-40" : ""}
               `}
               onClick={() => variant && onSelect(index)}
@@ -99,7 +102,7 @@ export default function VariantSelector({
 
               {/* Content */}
               {hasContent ? (
-                <pre className="whitespace-pre-wrap text-sm text-[var(--fg)] font-sans leading-relaxed">
+                <pre className="whitespace-pre-wrap text-sm text-[var(--fg)] leading-relaxed" style={{ fontFamily: "var(--font-inter)" }}>
                   {displayText}
                   {isStreaming && <span className="streaming-cursor" />}
                 </pre>

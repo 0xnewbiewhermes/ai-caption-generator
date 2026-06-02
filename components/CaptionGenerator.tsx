@@ -277,7 +277,7 @@ export default function CaptionGenerator() {
           <span className="label">Sisa generate hari ini</span>
           <span
             className={`text-[11px] font-bold tabular-nums ${
-              getRemainingGenerations() <= 1 ? "text-[var(--accent)]" : "text-[var(--muted)]"
+              getRemainingGenerations() <= 1 ? "text-[var(--red)]" : "text-[var(--muted)]"
             }`}
             style={{ fontFamily: "var(--font-space-mono)" }}
           >
@@ -289,7 +289,7 @@ export default function CaptionGenerator() {
       {/* Error */}
       {error && (
         <div
-          className="p-4 bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-sm text-[var(--accent)]"
+          className="p-4 bg-[var(--red-light)] border border-[var(--red)]/20 rounded-xl text-sm text-[var(--red)]"
           role="alert"
         >
           {error}
@@ -302,13 +302,13 @@ export default function CaptionGenerator() {
           <div className="flex items-center justify-between">
             <span className="label">Sedang menulis...</span>
             <span
-              className="text-[10px] text-[var(--accent)]"
+              className="text-[10px] text-[var(--muted)]"
               style={{ fontFamily: "var(--font-space-mono)" }}
             >
               streaming
             </span>
           </div>
-          <div className="card p-5 border-l-[3px] border-l-[var(--yellow)]">
+          <div className="card p-5 border-l-[3px] border-l-[var(--yellow-fg)]">
             <pre className="whitespace-pre-wrap text-sm text-[var(--fg)] font-sans leading-relaxed">
               {streamingText}
               <span className="streaming-cursor" />

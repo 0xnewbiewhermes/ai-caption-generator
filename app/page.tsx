@@ -32,10 +32,9 @@ export default function Home() {
       />
 
       {/* ── Header ── */}
-      <header className="border-b border-[var(--border)] bg-[var(--bg)]/80">
-        <nav className="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between">
+      <header>
+        <nav className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-[var(--accent)]" />
             <span
               className="text-sm font-bold tracking-tight text-[var(--fg)]"
               style={{ fontFamily: "var(--font-syne)" }}
@@ -49,20 +48,20 @@ export default function Home() {
 
       <main className="flex-1">
         {/* ── Hero ── */}
-        <section className="max-w-4xl mx-auto px-5 sm:px-6 pt-16 pb-12 sm:pt-32 sm:pb-24">
+        <section className="max-w-5xl mx-auto px-5 sm:px-6 pt-10 pb-12 sm:pt-16 sm:pb-24">
           <div className="max-w-2xl">
-            <div className="accent-line mb-5 sm:mb-6" />
+            <div className="accent-line mb-6 sm:mb-8" />
             <h1 className="display text-[var(--fg)] animate-in">
               Tulis caption, bukan cuma <span className="text-[var(--accent)]">generate.</span>
             </h1>
             <p
-              className="mt-5 sm:mt-6 text-[var(--fg-dim)] text-base sm:text-lg leading-relaxed max-w-md animate-in-delayed"
+              className="mt-6 sm:mt-8 text-[var(--fg-dim)] text-base sm:text-lg leading-relaxed max-w-md animate-in-delayed"
               style={{ fontFamily: "var(--font-instrument-serif)", fontStyle: "italic" }}
             >
               Ketik topik apa aja, bahkan cuma 1 kata. AI buatkan brief
               detail, lalu tulis caption yang natural dan siap post.
             </p>
-            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 animate-in-delayed">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 animate-in-delayed">
               <a href="#generator" className="btn btn-primary w-full sm:w-auto justify-center">
                 Coba sekarang
                 <IconArrowRight className="w-4 h-4" />
@@ -73,7 +72,7 @@ export default function Home() {
         </section>
 
         {/* ── Generator ── */}
-        <section id="generator" className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
+        <section id="generator" className="max-w-5xl mx-auto px-5 sm:px-6 pb-20 sm:pb-28">
           <div className="relative">
             {/* Watermark — hidden on small screens */}
             <div
@@ -89,9 +88,9 @@ export default function Home() {
         </section>
 
         {/* ── Explanation ── */}
-        <section className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
-          <div className="card-accent p-5 sm:p-8">
-            <div className="flex items-start gap-3 sm:gap-4 mb-5">
+        <section className="max-w-5xl mx-auto px-5 sm:px-6 pb-20 sm:pb-28">
+          <div className="card-accent p-6 sm:p-10">
+            <div className="flex items-start gap-4 sm:gap-5 mb-6">
               <span className="section-number leading-none text-[3rem] sm:text-[clamp(4rem,10vw,8rem)]">?</span>
               <div>
                 <h2
@@ -100,7 +99,7 @@ export default function Home() {
                 >
                   Kenapa hasilnya beda?
                 </h2>
-                <div className="accent-line mt-2" />
+                <div className="accent-line mt-3" />
               </div>
             </div>
             <div className="space-y-4 text-sm text-[var(--fg-dim)] leading-relaxed">
@@ -139,12 +138,12 @@ export default function Home() {
               ].map((ex, i) => (
                 <div
                   key={i}
-                  className="bg-[var(--bg)] border border-[var(--border)] p-5 text-xs space-y-3"
+                  className="bg-[var(--bg)] border border-[var(--border)] rounded-xl p-5 text-xs space-y-3"
                 >
                   <div>
                     <span className="label">Input</span>
                     <p
-                      className="text-[var(--accent)] mt-1.5 text-sm"
+                      className="text-[var(--accent)] mt-2 text-sm"
                       style={{ fontFamily: "var(--font-instrument-serif)", fontStyle: "italic" }}
                     >
                       {ex.before}
@@ -153,7 +152,7 @@ export default function Home() {
                   <div className="divider" />
                   <div>
                     <span className="label">Brief yang dibuat AI</span>
-                    <p className="text-[var(--muted)] mt-1.5 leading-relaxed">
+                    <p className="text-[var(--muted)] mt-2 leading-relaxed">
                       {ex.after}
                     </p>
                   </div>
@@ -164,9 +163,9 @@ export default function Home() {
         </section>
 
         {/* ── Features ── */}
-        <section className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
-          <div className="label mb-6">Fitur</div>
-          <div className="space-y-0">
+        <section className="max-w-5xl mx-auto px-5 sm:px-6 pb-20 sm:pb-28">
+          <div className="label mb-8">Fitur</div>
+          <div className="grid sm:grid-cols-2 gap-4">
             {[
               {
                 num: "01",
@@ -191,33 +190,31 @@ export default function Home() {
             ].map((f) => (
               <div
                 key={f.num}
-                className="flex gap-5 py-5 border-b border-[var(--border)] last:border-0 group"
+                className="card p-6 group hover:border-[var(--accent)]/20 transition-colors"
               >
                 <span
-                  className="text-[var(--subtle)] text-sm font-bold tabular-nums w-8 shrink-0 pt-0.5 group-hover:text-[var(--accent)] transition-colors"
+                  className="text-[var(--accent)] text-xs font-bold tabular-nums mb-3 block"
                   style={{ fontFamily: "var(--font-space-mono)" }}
                 >
                   {f.num}
                 </span>
-                <div>
-                  <h3
-                    className="text-base font-bold text-[var(--fg)] tracking-tight"
-                    style={{ fontFamily: "var(--font-syne)" }}
-                  >
-                    {f.title}
-                  </h3>
-                  <p className="text-sm text-[var(--muted)] mt-1 leading-relaxed">
-                    {f.desc}
-                  </p>
-                </div>
+                <h3
+                  className="text-base font-bold text-[var(--fg)] tracking-tight mb-2"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
+                  {f.title}
+                </h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed">
+                  {f.desc}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
         {/* ── FAQ ── */}
-        <section className="max-w-4xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20">
-          <div className="label mb-6">FAQ</div>
+        <section className="max-w-5xl mx-auto px-5 sm:px-6 pb-20 sm:pb-28">
+          <div className="label mb-8">FAQ</div>
           <div className="space-y-0">
             {[
               {
@@ -260,10 +257,9 @@ export default function Home() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[var(--border)] py-6 sm:py-8 px-5 sm:px-6">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-[var(--accent)]" />
+      <footer className="border-t border-[var(--border)] py-8 sm:py-10 px-5 sm:px-6">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+          <div className="flex items-center gap-2.5">
             <span
               className="text-xs font-bold text-[var(--muted)]"
               style={{ fontFamily: "var(--font-syne)" }}

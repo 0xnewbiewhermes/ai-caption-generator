@@ -54,7 +54,7 @@ export default function ToneSelector({
                 tone-pill px-4 py-2 text-xs font-semibold tracking-wide
                 ${
                   isSelected
-                    ? "bg-[var(--fg)] text-[var(--bg)]"
+                    ? "bg-[var(--accent)] text-white shadow-[var(--shadow-sm)]"
                     : "bg-transparent border border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)] hover:border-[var(--subtle)]"
                 }
               `}

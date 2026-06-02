@@ -67,7 +67,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
       {/* Header */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-4 hover:bg-[var(--bg-warm)] transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-[var(--bg-warm)] transition-colors rounded-2xl"
       >
         <div className="flex items-center gap-3">
           <span className="label">History</span>
@@ -89,18 +89,18 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
       {expanded && (
         <div className="border-t border-[var(--border)]">
           {/* Tabs */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border)]">
-            <div className="flex gap-1">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--border)]">
+            <div className="flex gap-1.5">
               {(["all", "favorite"] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`px-3 py-1 text-[10px] font-bold tracking-wide uppercase transition-colors ${
+                  className={`px-3 py-1 text-[10px] font-bold tracking-wide uppercase transition-all ${
                     filter === f
-                      ? "bg-[var(--fg)] text-[var(--bg)]"
+                      ? "bg-[var(--accent)] text-white"
                       : "text-[var(--muted)] hover:text-[var(--fg)]"
                   }`}
-                  style={{ fontFamily: "var(--font-space-mono)" }}
+                  style={{ fontFamily: "var(--font-space-mono)", borderRadius: "9999px" }}
                 >
                   {f === "all" ? "Semua" : "Favorit"}
                 </button>
@@ -108,7 +108,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
             </div>
             <button
               onClick={handleClear}
-              className="text-[10px] text-[var(--subtle)] hover:text-[var(--accent)] transition-colors"
+              className="text-[10px] text-[var(--subtle)] hover:text-[var(--red)] transition-colors"
               style={{ fontFamily: "var(--font-space-mono)" }}
             >
               Hapus semua
@@ -160,7 +160,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
                     <button
                       onClick={() => handleToggleFavorite(item.id)}
                       className={`p-1.5 transition-colors ${
-                        item.favorite ? "text-[var(--accent)]" : "text-[var(--muted)] hover:text-[var(--accent)]"
+                        item.favorite ? "text-[var(--red)]" : "text-[var(--muted)] hover:text-[var(--red)]"
                       }`}
                       title="Favorite"
                     >
@@ -175,7 +175,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="p-1.5 text-[var(--subtle)] hover:text-[var(--accent)] transition-colors"
+                      className="p-1.5 text-[var(--subtle)] hover:text-[var(--red)] transition-colors"
                       title="Hapus"
                     >
                       ×
