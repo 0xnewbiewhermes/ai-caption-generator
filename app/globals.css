@@ -11,7 +11,7 @@
   --fg: #000000;
   --fg-dim: #1a1a1a;
   --muted: #555555;
-  --subtle: #888888;
+  --subtle: #707070;
   --border: #E5E0D4;
   --border-dark: #D0CABC;
   --surface: #FFFFFF;
@@ -112,6 +112,7 @@ body {
   letter-spacing: -0.03em;
   text-transform: uppercase;
   color: var(--fg);
+  text-wrap: balance;
 }
 
 @media (max-width: 480px) {
@@ -217,8 +218,14 @@ body {
   .animate-in,
   .animate-in-delayed,
   .animate-fade,
-  .animate-slide-left {
+  .animate-slide-left,
+  .accent-line {
     animation: none;
+  }
+
+  .streaming-cursor {
+    animation: none;
+    opacity: 1;
   }
 }
 
@@ -287,6 +294,15 @@ body {
   box-shadow: var(--shadow-md);
 }
 
+.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-ghost:active {
+  opacity: 0.7;
+}
+
 .btn-ghost {
   background: transparent;
   color: var(--muted);
@@ -310,6 +326,10 @@ body {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
   box-shadow: var(--shadow-sm);
+}
+
+.input:hover:not(:disabled) {
+  border-color: var(--border-dark);
 }
 
 .input:focus {
@@ -383,6 +403,11 @@ body {
   color: var(--fg);
 }
 
+/* ── Heading balance ── */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
 /* ══════════════════════════════════════════
    LAYOUT HELPERS
    ══════════════════════════════════════════ */
@@ -391,6 +416,10 @@ pre {
   max-width: 100%;
   word-break: break-word;
   overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 textarea {
@@ -453,6 +482,11 @@ section {
   box-shadow: var(--shadow-md);
 }
 
+.platform-card[data-selected="true"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 40px rgba(49, 57, 251, 0.25);
+}
+
 /* ── Tone pill ── */
 .tone-pill {
   transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out, background-color 0.2s ease-in-out;
@@ -473,6 +507,21 @@ section {
   border-color: var(--accent);
   color: var(--accent);
   transform: translateY(-1px);
+}
+
+/* ── FAQ details ── */
+details summary {
+  transition: color 0.15s ease;
+}
+
+details summary:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+details[open] summary {
+  color: var(--accent);
 }
 
 /* ── Scrollbar hide (for horizontal scroll on mobile) ── */

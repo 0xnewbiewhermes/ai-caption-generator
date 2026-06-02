@@ -42,7 +42,6 @@ export default function Home() {
               aicaption
             </span>
           </div>
-          <span className="label">Gratis · Tanpa login</span>
         </nav>
       </header>
 

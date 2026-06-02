@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import type { Platform, Tone } from "@/lib/mimo";
 import { getHistory, toggleFavorite, deleteFromHistory, clearHistory, type HistoryItem } from "@/lib/history";
-import { IconCopy, IconCheck, IconRefresh, IconArrowRight } from "./icons";
+import { IconCopy, IconCheck, IconRefresh, IconArrowRight, IconStarFilled, IconStarOutline } from "./icons";
 
 interface HistoryPanelProps {
   onSelect: (item: HistoryItem) => void;
@@ -149,33 +149,33 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
                   </div>
 
                   {/* Actions */}
-                  <div className="flex flex-col gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex flex-col gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleCopy(item)}
-                      className="p-1.5 text-[var(--muted)] hover:text-[var(--fg)] transition-colors"
+                      className="p-1.5 rounded-md text-[var(--muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-warm)] transition-colors"
                       aria-label="Copy caption"
                     >
                       {copiedId === item.id ? <IconCheck className="w-3 h-3" /> : <IconCopy className="w-3 h-3" />}
                     </button>
                     <button
                       onClick={() => handleToggleFavorite(item.id)}
-                      className={`p-1.5 transition-colors ${
-                        item.favorite ? "text-[var(--red)]" : "text-[var(--muted)] hover:text-[var(--red)]"
+                      className={`p-1.5 rounded-md transition-colors ${
+                        item.favorite ? "text-[var(--red)]" : "text-[var(--muted)] hover:text-[var(--red)] hover:bg-[var(--red-light)]"
                       }`}
                       aria-label={item.favorite ? "Hapus dari favorit" : "Tambah ke favorit"}
                     >
-                      {item.favorite ? "★" : "☆"}
+                      {item.favorite ? <IconStarFilled className="w-3 h-3" /> : <IconStarOutline className="w-3 h-3" />}
                     </button>
                     <button
                       onClick={() => onSelect(item)}
-                      className="p-1.5 text-[var(--muted)] hover:text-[var(--fg)] transition-colors"
+                      className="p-1.5 rounded-md text-[var(--muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-warm)] transition-colors"
                       aria-label="Pakai lagi"
                     >
                       <IconArrowRight className="w-3 h-3" />
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="p-1.5 text-[var(--subtle)] hover:text-[var(--red)] transition-colors"
+                      className="p-1.5 rounded-md text-[var(--subtle)] hover:text-[var(--red)] hover:bg-[var(--red-light)] transition-colors"
                       aria-label="Hapus caption"
                     >
                       ×

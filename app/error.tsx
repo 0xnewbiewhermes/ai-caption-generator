@@ -17,7 +17,7 @@ export default function Error({
   return (
     <div className="flex-1 flex items-center justify-center p-6">
       <div className="text-center space-y-5 max-w-xs">
-        <div className="w-14 h-14 mx-auto bg-[var(--accent)]/10 border border-[var(--accent)]/30 flex items-center justify-center">
+        <div className="w-14 h-14 mx-auto bg-[var(--accent)]/10 border border-[var(--accent)]/30 rounded-xl flex items-center justify-center">
           <svg
             className="w-7 h-7 text-[var(--accent)]"
             viewBox="0 0 24 24"
