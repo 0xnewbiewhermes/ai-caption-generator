@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 export default function Error({
@@ -10,8 +10,12 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
   useEffect(() => {
     console.error("Application error:", error);
+    // Focus the error heading so keyboard users know where they are
+    headingRef.current?.focus();
   }, [error]);
 
   return (
@@ -33,7 +37,9 @@ export default function Error({
           </svg>
         </div>
         <h2
-          className="text-base font-bold text-[var(--fg)]"
+          ref={headingRef}
+          tabIndex={-1}
+          className="text-base font-bold text-[var(--fg)] outline-none"
           style={{ fontFamily: "var(--font-syne)" }}
         >
           Terjadi kesalahan

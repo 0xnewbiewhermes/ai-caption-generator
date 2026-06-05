@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Platform, Tone } from "@/lib/mimo";
+import type { Platform } from "@/lib/mimo";
 import { getHistory, toggleFavorite, deleteFromHistory, clearHistory, type HistoryItem } from "@/lib/history";
-import { IconCopy, IconCheck, IconRefresh, IconArrowRight, IconStarFilled, IconStarOutline } from "./icons";
+import { IconCopy, IconCheck, IconArrowRight, IconStarFilled, IconStarOutline } from "./icons";
 
 interface HistoryPanelProps {
   onSelect: (item: HistoryItem) => void;
@@ -80,6 +80,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
         </div>
         <span
           className={`text-[var(--subtle)] transition-transform ${expanded ? "rotate-90" : ""}`}
+          aria-hidden="true"
         >
           →
         </span>
@@ -149,7 +150,7 @@ export default function HistoryPanel({ onSelect, isLoading }: HistoryPanelProps)
                   </div>
 
                   {/* Actions */}
-                  <div className="flex flex-col gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex flex-col gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleCopy(item)}
                       className="p-1.5 rounded-md text-[var(--muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-warm)] transition-colors"

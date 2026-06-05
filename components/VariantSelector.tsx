@@ -111,7 +111,7 @@ export default function VariantSelector({
                   {isStreaming && <span className="streaming-cursor" />}
                 </pre>
               ) : (
-                <div className="text-sm text-[var(--subtle)] italic">
+                <div className="text-sm text-[var(--muted)]">
                   Menunggu…
                 </div>
               )}

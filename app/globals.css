@@ -20,8 +20,8 @@
   --accent-hover: #252DE0;
   --accent-light: rgba(49, 57, 251, 0.08);
   --accent-fg: #FFFFFF;
-  --red: #FB3A4D;
-  --red-light: rgba(251, 58, 77, 0.08);
+  --red: #C62828;
+  --red-light: rgba(198, 40, 40, 0.10);
   --dark-blue: #000354;
   --deep-blue: #2404AA;
   --yellow-fg: #FFB223;
@@ -497,6 +497,11 @@ section {
   transform: translateY(-1px);
 }
 
+.tone-pill:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+
 /* ── Example chip ── */
 .example-chip {
   transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
@@ -507,6 +512,11 @@ section {
   border-color: var(--accent);
   color: var(--accent);
   transform: translateY(-1px);
+}
+
+.example-chip:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
 }
 
 /* ── FAQ details ── */
@@ -549,6 +559,14 @@ details[open] summary {
 }
 
 .feedback-btn:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+
+/* ── Generic focus-visible for interactive elements in cards ── */
+.card button:focus-visible,
+.card a:focus-visible,
+[role="radio"]:focus-visible {
   outline: 2px solid var(--focus-outline);
   outline-offset: 2px;
 }

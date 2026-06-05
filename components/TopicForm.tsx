@@ -75,6 +75,8 @@ export default function TopicForm({
           <span
             className="text-[10px] text-[var(--subtle)] tabular-nums"
             style={{ fontFamily: "var(--font-space-mono)" }}
+            aria-live="polite"
+            aria-atomic="true"
           >
             {topic.length}/500
           </span>

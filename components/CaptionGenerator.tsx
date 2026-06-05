@@ -243,7 +243,8 @@ export default function CaptionGenerator() {
   return (
     <section
       id="main-content"
-      className="w-full max-w-xl mx-auto space-y-8"
+      tabIndex={-1}
+      className="w-full max-w-xl mx-auto space-y-8 outline-none"
       aria-label="Caption Generator"
     >
       {/* Platform */}

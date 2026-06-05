@@ -83,6 +83,8 @@ export default function ToneSelector({
           <span
             className="text-[10px] text-[var(--subtle)] tabular-nums mt-1 block text-right"
             style={{ fontFamily: "var(--font-space-mono)" }}
+            aria-live="polite"
+            aria-atomic="true"
           >
             {customTone.length}/200
           </span>

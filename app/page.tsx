@@ -167,35 +167,32 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 gap-4">
             {[
               {
-                num: "01",
+                accent: "📱",
                 title: "3 platform",
                 desc: "Instagram, Twitter/X, dan TikTok. Masing-masing punya aturan karakter, hashtag, dan gaya bahasa yang berbeda.",
               },
               {
-                num: "02",
+                accent: "🎭",
                 title: "9 gaya bahasa",
                 desc: "Santai, profesional, lucu, motivasi, cerita, Gen Z, puitis, edukatif, promo. Pilih yang sesuai dengan mood konten-mu.",
               },
               {
-                num: "03",
+                accent: "✍️",
                 title: "Input minimalis",
                 desc: "Ketik 1-2 kata, AI yang kembangin. Nggak perlu brief panjang atau prompt engineering.",
               },
               {
-                num: "04",
-                title: "Tanpa akun",
-                desc: "Langsung pakai. Tidak perlu daftar, tidak perlu login, tidak ada batasan.",
+                accent: "🔓",
+                title: "Gratis",
+                desc: "Langsung pakai. Tidak perlu daftar, tidak perlu login. Hingga 5 caption gratis per hari.",
               },
             ].map((f) => (
               <div
-                key={f.num}
+                key={f.title}
                 className="card p-6 group hover:border-[var(--accent)]/20 transition-colors"
               >
-                <span
-                  className="text-[var(--accent)] text-xs font-bold tabular-nums mb-3 block"
-                  style={{ fontFamily: "var(--font-space-mono)" }}
-                >
-                  {f.num}
+                <span className="text-lg mb-2 block">
+                  {f.accent}
                 </span>
                 <h3
                   className="text-base font-bold text-[var(--fg)] tracking-tight mb-2"
@@ -218,7 +215,7 @@ export default function Home() {
             {[
               {
                 q: "Ini beneran gratis?",
-                a: "Ya. Tanpa login, tanpa batasan, tanpa watermark.",
+                a: "Ya. Tanpa login, tanpa watermark, 5x gratis tiap hari.",
               },
               {
                 q: "Bedanya sama ChatGPT langsung?",
