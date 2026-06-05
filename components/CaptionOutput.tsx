@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { GenerateResponse } from "@/lib/mimo";
 import { IconCopy, IconCheck, IconRefresh } from "./icons";
+import FeedbackButtons from "./FeedbackButtons";
 
 interface CaptionOutputProps {
   result: GenerateResponse;
@@ -78,6 +79,9 @@ export default function CaptionOutput({
           {result.caption}
         </pre>
       </div>
+
+      {/* Feedback */}
+      <FeedbackButtons result={result} />
 
       {/* Actions */}
       <div className="flex gap-3">

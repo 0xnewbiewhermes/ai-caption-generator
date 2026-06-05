@@ -524,6 +524,51 @@ details[open] summary {
   color: var(--accent);
 }
 
+/* ══════════════════════════════════════════
+   FEEDBACK BUTTONS — Like/dislike pills
+   ══════════════════════════════════════════ */
+
+.feedback-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  outline: none;
+}
+
+.feedback-btn:hover {
+  border-color: var(--border-dark);
+  transform: translateY(-1px);
+}
+
+.feedback-btn:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+
+.feedback-btn:active {
+  transform: translateY(0);
+}
+
+.feedback-btn--active-like {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.feedback-btn--active-dislike {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-light);
+}
+
 /* ── Scrollbar hide (for horizontal scroll on mobile) ── */
 .scrollbar-none {
   -ms-overflow-style: none;
